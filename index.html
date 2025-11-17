@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MilAnd - Joyería de Lujo y Autenticidad</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600&display=swap');
+        
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-lato { font-family: 'Lato', sans-serif; }
+        
+        /* Theme Variables */
+        :root {
+            --emerald-primary: #064e3b;
+            --emerald-secondary: #047857;
+            --emerald-light: #10b981;
+            --gold-primary: #d97706;
+            --gold-secondary: #f59e0b;
+            --gold-light: #fbbf24;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+        }
+        
+        [data-theme="dark"] {
+            --emerald-primary: #10b981;
+            --emerald-secondary: #34d399;
+            --emerald-light: #6ee7b7;
+            --gold-primary: #fbbf24;
+            --gold-secondary: #fcd34d;
+            --gold-light: #fde68a;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+        }
+        
+        .emerald-gradient {
+            background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-secondary) 50%, var(--emerald-light) 100%);
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 50%, var(--gold-light) 100%);
+        }
+        
+        .luxury-shadow {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .diamond-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .diamond {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-12px) scale(1.02);
+        }
+        
+        .emerald-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .emerald-shine::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .emerald-shine:hover::before {
+            animation: shine 1.5s ease-in-out;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .carousel-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+        
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background: var(--gold-secondary);
+            transform: scale(1.2);
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 20;
+        }
+        
+        .carousel-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-nav.prev { left: 30px; }
+        .carousel-nav.next { right: 30px; }
+        
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .whatsapp-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .whatsapp-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-modal.active .whatsapp-content {
+            transform: scale(1);
+        }
+        
+        /* Product Gallery */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.8), rgba(217, 119, 6, 0.8));
+            opacity: 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        /* Testimonials */
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            min-width: 350px;
+        }
+        
+        .testimonial-track {
+            display: flex;
+            gap: 30px;
+            transition: transform 0.5s ease;
+        }
+        
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--emerald-secondary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        [data-theme="dark"] .theme-toggle::before {
+            transform: translateX(30px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* Configurator Styles */
+        .configurator-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .configurator-section.active {
+            border-color: var(--emerald-secondary);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-item {
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-item:hover {
+            border-color: var(--emerald-secondary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .option-item.selected {
+            border-color: var(--emerald-secondary);
+            background: var(--emerald-secondary);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .carousel-nav { width: 50px; height: 50px; }
+            .carousel-nav.prev { left: 15px; }
+            .carousel-nav.next { right: 15px; }
+            .product-grid { grid-template-columns: 1fr; }
+            .testimonial-card { min-width: 280px; }
+            .modal-content { padding: 20px; max-width: 95%; }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full font-lato text-gray-900 bg-white transition-all duration-300"><!-- Diamond Particles -->
+  <div class="diamond-particles" id="particles"></div><!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 glass-effect border-b border-white/20 transition-all duration-300">
+   <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-center h-20"><!-- Logo -->
+     <div class="flex items-center space-x-3">
+      <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center emerald-shine">
+       <svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z" />
+       </svg>
+      </div>
+      <div>
+       <h1 id="brand-name" class="font-playfair text-2xl font-bold text-emerald-800">MilAnd</h1>
+       <p id="tagline" class="font-lato text-sm text-amber-600 font-medium">Joyería de Lujo y Autenticidad</p>
+      </div>
+     </div><!-- Desktop Menu -->
+     <div class="hidden lg:flex items-center space-x-8"><a href="#inicio" class="font-lato text-emerald-800 hover:text-amber-600 transition-colors font-medium">Inicio</a> <a href="#galeria" class="font-lato text-emerald-800 hover:text-amber-600 transition-colors font-medium">Galería</a> <a href="#pilares" class="font-lato text-emerald-800 hover:text-amber-600 transition-colors font-medium">Pilares</a> <a href="#testimonios" class="font-lato text-emerald-800 hover:text-amber-600 transition-colors font-medium">Testimonios</a> <a href="#contacto" class="font-lato text-emerald-800 hover:text-amber-600 transition-colors font-medium">Contacto</a>
+     </div><!-- Social & Theme Toggle -->
+     <div class="flex items-center space-x-4"><!-- Social Media -->
+      <div class="hidden md:flex items-center space-x-3"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg></a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.404c-.315 0-.612-.123-.833-.344-.221-.221-.344-.518-.344-.833 0-.315.123-.612.344-.833.221-.221.518-.344.833-.344.315 0 .612.123.833.344.221.221.344.518.344.833 0 .315-.123.612-.344.833-.221.221-.518.344-.833.344z" />
+        </svg></a> <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+        </svg></a>
+      </div><!-- Theme Toggle -->
+      <div class="theme-toggle" id="themeToggle"></div><!-- Mobile Menu Button --> <button class="lg:hidden p-2 text-emerald-800" id="mobileMenuBtn">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg></button>
+     </div>
+    </div><!-- Mobile Menu -->
+    <div class="lg:hidden hidden" id="mobileMenu">
+     <div class="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-md rounded-b-2xl"><a href="#inicio" class="block px-3 py-2 text-emerald-800 hover:text-amber-600 transition-colors font-medium">Inicio</a> <a href="#galeria" class="block px-3 py-2 text-emerald-800 hover:text-amber-600 transition-colors font-medium">Galería</a> <a href="#pilares" class="block px-3 py-2 text-emerald-800 hover:text-amber-600 transition-colors font-medium">Pilares</a> <a href="#testimonios" class="block px-3 py-2 text-emerald-800 hover:text-amber-600 transition-colors font-medium">Testimonios</a> <a href="#contacto" class="block px-3 py-2 text-emerald-800 hover:text-amber-600 transition-colors font-medium">Contacto</a> <!-- Mobile Social -->
+      <div class="flex justify-center space-x-4 pt-4"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg></a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.404c-.315 0-.612-.123-.833-.344-.221-.221-.344-.518-.344-.833 0-.315.123-.612.344-.833.221-.221.518-.344.833-.344.315 0 .612.123.833.344.221.221.344.518.344.833 0 .315-.123.612-.344.833-.221.221-.518.344-.833.344z" />
+        </svg></a> <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white">
+        <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+        </svg></a>
+      </div>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Hero Carousel -->
+  <section id="inicio" class="relative min-h-screen carousel-container">
+   <div class="carousel-track" id="carouselTrack"><!-- Slide 1 -->
+    <div class="carousel-slide">
+     <div class="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-900 flex items-center justify-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-black/20"></div><img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80" alt="Esmeraldas Colombianas" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay" onerror="this.style.display='none';">
+      <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 text-center text-white">
+       <h2 id="hero-title" class="font-playfair text-5xl md:text-7xl font-bold mb-6 leading-tight">Piezas únicas con la<br><span class="gold-gradient bg-clip-text text-transparent">Esmeralda Colombiana</span></h2>
+       <p id="hero-subtitle" class="font-lato text-xl md:text-2xl mb-12 font-light opacity-90">La más valiosa del mundo</p>
+       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center"><button onclick="scrollToSection('galeria')" class="emerald-gradient text-white px-8 py-4 rounded-full font-lato font-medium text-lg hover-lift emerald-shine luxury-shadow"> Explorar Colección </button> <button onclick="openJewelryConfigurator()" class="glass-effect text-white px-8 py-4 rounded-full font-lato font-medium text-lg hover-lift luxury-shadow border border-white/30"> Configurador de Joyas </button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Slide 2 -->
+    <div class="carousel-slide">
+     <div class="min-h-screen bg-gradient-to-br from-amber-900 via-yellow-800 to-emerald-900 flex items-center justify-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-black/20"></div><img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80" alt="Oro 18K" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay" onerror="this.style.display='none';">
+      <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 text-center text-white">
+       <h2 class="font-playfair text-5xl md:text-7xl font-bold mb-6 leading-tight">Oro 18K<br><span class="gold-gradient bg-clip-text text-transparent">Certificado</span></h2>
+       <p class="font-lato text-xl md:text-2xl mb-12 font-light opacity-90">Calidad y autenticidad garantizada</p>
+       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center"><button onclick="showCertifications()" class="gold-gradient text-white px-8 py-4 rounded-full font-lato font-medium text-lg hover-lift emerald-shine luxury-shadow"> Ver Certificaciones </button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Slide 3 -->
+    <div class="carousel-slide">
+     <div class="min-h-screen bg-gradient-to-br from-emerald-800 via-teal-700 to-cyan-800 flex items-center justify-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-black/20"></div><img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80" alt="Filigrana Artesanal" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay" onerror="this.style.display='none';">
+      <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 text-center text-white">
+       <h2 class="font-playfair text-5xl md:text-7xl font-bold mb-6 leading-tight">Técnica de<br><span class="gold-gradient bg-clip-text text-transparent">Filigrana</span></h2>
+       <p class="font-lato text-xl md:text-2xl mb-12 font-light opacity-90">Arte y precisión en cada hilo</p>
+       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center"><button onclick="showArtisanalProcess()" class="emerald-gradient text-white px-8 py-4 rounded-full font-lato font-medium text-lg hover-lift emerald-shine luxury-shadow"> Proceso Artesanal </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Carousel Navigation --> <button class="carousel-nav prev" id="prevBtn">
+    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg></button> <button class="carousel-nav next" id="nextBtn">
+    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg></button> <!-- Carousel Controls -->
+   <div class="carousel-controls" id="carouselDots">
+    <div class="carousel-dot active" data-slide="0"></div>
+    <div class="carousel-dot" data-slide="1"></div>
+    <div class="carousel-dot" data-slide="2"></div>
+   </div><!-- Play/Pause Button --> <button class="absolute top-6 right-6 glass-effect text-white p-3 rounded-full hover:scale-110 transition-transform z-20" id="playPauseBtn">
+    <svg class="w-6 h-6" id="playIcon" fill="currentColor" viewbox="0 0 24 24"><path d="M8 5v14l11-7z" />
+    </svg>
+    <svg class="w-6 h-6 hidden" id="pauseIcon" fill="currentColor" viewbox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    </svg></button>
+  </section><!-- Product Gallery -->
+  <section id="galeria" class="py-20 bg-gradient-to-br from-gray-50 to-stone-100">
+   <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="scroll-reveal text-center mb-16">
+     <h3 class="font-playfair text-4xl md:text-5xl font-bold text-emerald-900 mb-8">Galería de Productos</h3>
+     <div class="w-24 h-1 gold-gradient mx-auto mb-8"></div>
+     <p class="font-lato text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">Descubre nuestra exclusiva colección de joyas únicas, cada una creada con la más fina artesanía colombiana.</p>
+    </div><!-- Product Filters -->
+    <div class="scroll-reveal flex flex-wrap justify-center gap-4 mb-12"><button class="filter-btn active px-6 py-3 rounded-full font-lato font-medium transition-all" data-filter="all">Todos</button> <button class="filter-btn px-6 py-3 rounded-full font-lato font-medium transition-all" data-filter="anillos">Anillos</button> <button class="filter-btn px-6 py-3 rounded-full font-lato font-medium transition-all" data-filter="collares">Collares</button> <button class="filter-btn px-6 py-3 rounded-full font-lato font-medium transition-all" data-filter="aretes">Aretes</button> <button class="filter-btn px-6 py-3 rounded-full font-lato font-medium transition-all" data-filter="pulseras">Pulseras</button>
+    </div><!-- Product Grid -->
+    <div class="scroll-reveal product-grid" id="productGrid"><!-- Anillos -->
+     <div class="product-card" data-category="anillos">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Anillo Esmeralda Real" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('anillo-esmeralda-real')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Anillo Esmeralda Real</h4>
+       <p class="font-lato text-gray-600 mb-4">Oro 18K con esmeralda colombiana certificada</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$2,850</span> <button onclick="personalizeProduct('anillo-esmeralda-real')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div><!-- Collares -->
+     <div class="product-card" data-category="collares">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Collar Filigrana Dorada" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('collar-filigrana-dorada')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Collar Filigrana Dorada</h4>
+       <p class="font-lato text-gray-600 mb-4">Técnica artesanal en oro 18K</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$1,950</span> <button onclick="personalizeProduct('collar-filigrana-dorada')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div><!-- Aretes -->
+     <div class="product-card" data-category="aretes">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Aretes Esmeralda Clásicos" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('aretes-esmeralda-clasicos')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Aretes Esmeralda Clásicos</h4>
+       <p class="font-lato text-gray-600 mb-4">Elegancia atemporal en oro 18K</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$1,450</span> <button onclick="personalizeProduct('aretes-esmeralda-clasicos')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div><!-- Pulseras -->
+     <div class="product-card" data-category="pulseras">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Pulsera Tradición Colombiana" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('pulsera-tradicion-colombiana')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Pulsera Tradición Colombiana</h4>
+       <p class="font-lato text-gray-600 mb-4">Filigrana artesanal con esmeraldas</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$1,750</span> <button onclick="personalizeProduct('pulsera-tradicion-colombiana')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div><!-- More products -->
+     <div class="product-card" data-category="anillos">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Anillo Compromiso Esmeralda" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('anillo-compromiso-esmeralda')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Anillo Compromiso Esmeralda</h4>
+       <p class="font-lato text-gray-600 mb-4">Diseño exclusivo para momentos únicos</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$4,200</span> <button onclick="personalizeProduct('anillo-compromiso-esmeralda')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div>
+     <div class="product-card" data-category="collares">
+      <div class="product-image"><img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Collar Gargantilla Elegante" class="w-full h-full object-cover" onerror="this.style.display='none';">
+       <div class="product-overlay"><button onclick="showProductDetails('collar-gargantilla-elegante')" class="bg-white text-emerald-800 px-6 py-3 rounded-full font-medium hover:scale-105 transition-transform"> Ver Detalles </button>
+       </div>
+      </div>
+      <div class="p-6">
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Collar Gargantilla Elegante</h4>
+       <p class="font-lato text-gray-600 mb-4">Sofisticación en oro 18K</p>
+       <div class="flex justify-between items-center"><span class="font-playfair text-2xl font-bold text-amber-600">$2,350</span> <button onclick="personalizeProduct('collar-gargantilla-elegante')" class="emerald-gradient text-white px-4 py-2 rounded-full text-sm font-medium hover-lift"> Personalizar </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Pillars Section -->
+  <section id="pilares" class="py-20 bg-white">
+   <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="scroll-reveal text-center mb-16">
+     <h3 id="pillars-title" class="font-playfair text-4xl md:text-5xl font-bold text-emerald-900 mb-8">Los pilares de la marca</h3>
+     <div class="w-24 h-1 gold-gradient mx-auto mb-8"></div>
+     <p class="font-lato text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">Cada creación de MilAnd es un reflejo de la esencia de Colombia, la riqueza de su tierra, la pureza de sus esmeraldas y la maestría de sus artesanos.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+     <div class="scroll-reveal bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-8 luxury-shadow hover-lift emerald-shine">
+      <div class="w-16 h-16 emerald-gradient rounded-full flex items-center justify-center mb-6 mx-auto">
+       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z" />
+       </svg>
+      </div>
+      <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Esmeraldas certificadas</h4>
+      <p class="font-lato text-gray-600 text-center leading-relaxed">La esmeralda colombiana es la más valiosa del mundo, reconocida por su pureza, color y origen excepcional.</p>
+     </div>
+     <div class="scroll-reveal bg-gradient-to-br from-amber-50 to-yellow-100 rounded-2xl p-8 luxury-shadow hover-lift emerald-shine">
+      <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6 mx-auto">
+       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+       </svg>
+      </div>
+      <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Oro 18K garantizado</h4>
+      <p class="font-lato text-gray-600 text-center leading-relaxed">Calidad y autenticidad en cada pieza ofreciendo una inversión segura y duradera.</p>
+     </div>
+     <div class="scroll-reveal bg-gradient-to-br from-teal-50 to-cyan-100 rounded-2xl p-8 luxury-shadow hover-lift emerald-shine">
+      <div class="w-16 h-16 emerald-gradient rounded-full flex items-center justify-center mb-6 mx-auto">
+       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+       </svg>
+      </div>
+      <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Técnica de filigrana</h4>
+      <p class="font-lato text-gray-600 text-center leading-relaxed">La expresión más delicada de la orfebrería, donde cada hilo refleja arte y precisión.</p>
+     </div>
+     <div class="scroll-reveal bg-gradient-to-br from-orange-50 to-amber-100 rounded-2xl p-8 luxury-shadow hover-lift emerald-shine">
+      <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6 mx-auto">
+       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+       </svg>
+      </div>
+      <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Hecho en Cartagena</h4>
+      <p class="font-lato text-gray-600 text-center leading-relaxed">Más de 15 años de trayectoria forjando tradición orfebre colombiana.</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Testimonials Section -->
+  <section id="testimonios" class="py-20 bg-gradient-to-br from-emerald-900 to-emerald-800 text-white overflow-hidden">
+   <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="scroll-reveal text-center mb-16">
+     <h3 class="font-playfair text-4xl md:text-5xl font-bold mb-8">Testimonios de Clientes</h3>
+     <div class="w-24 h-1 bg-amber-400 mx-auto mb-8"></div>
+     <p class="font-lato text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">Descubre lo que nuestros clientes dicen sobre sus experiencias con MilAnd</p>
+    </div>
+    <div class="scroll-reveal relative">
+     <div class="testimonial-track" id="testimonialTrack">
+      <div class="testimonial-card">
+       <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="María González" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'w-20 h-20 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-800 font-bold text-2xl\'>MG</div>';">
+       </div>
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">María González</h4>
+       <p class="font-lato text-sm text-amber-600 mb-4">Cliente desde 2019</p>
+       <p class="font-lato text-gray-600 leading-relaxed mb-4">"Mi anillo de compromiso de MilAnd es simplemente perfecto. La esmeralda tiene un brillo único y la calidad del oro es excepcional. Cada vez que lo miro, me enamoro más de él."</p>
+       <div class="flex justify-center">
+        <div class="flex text-amber-400">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="testimonial-card">
+       <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="Carlos Mendoza" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'w-20 h-20 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-800 font-bold text-2xl\'>CM</div>';">
+       </div>
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Carlos Mendoza</h4>
+       <p class="font-lato text-sm text-amber-600 mb-4">Cliente desde 2020</p>
+       <p class="font-lato text-gray-600 leading-relaxed mb-4">"La atención personalizada y la calidad de las joyas de MilAnd superaron todas mis expectativas. El collar que compré para mi esposa es una obra de arte. Definitivamente volveré."</p>
+       <div class="flex justify-center">
+        <div class="flex text-amber-400">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="testimonial-card">
+       <div class="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=200&amp;q=80" alt="Ana Rodríguez" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'w-20 h-20 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-800 font-bold text-2xl\'>AR</div>';">
+       </div>
+       <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Ana Rodríguez</h4>
+       <p class="font-lato text-sm text-amber-600 mb-4">Cliente desde 2018</p>
+       <p class="font-lato text-gray-600 leading-relaxed mb-4">"Tengo varias piezas de MilAnd y cada una cuenta una historia. La técnica de filigrana es impresionante y se nota el amor por el detalle en cada joya. Son verdaderas obras de arte."</p>
+       <div class="flex justify-center">
+        <div class="flex text-amber-400">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+     </div><!-- Testimonial Navigation --> <button class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full w-12 h-12 flex items-center justify-center text-white hover:bg-white/30 transition-all" id="testimonialPrev">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg></button> <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full w-12 h-12 flex items-center justify-center text-white hover:bg-white/30 transition-all" id="testimonialNext">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg></button>
+    </div>
+   </div>
+  </section><!-- Contact Section -->
+  <section id="contacto" class="py-20 bg-gradient-to-br from-gray-50 to-stone-100">
+   <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="scroll-reveal text-center mb-16">
+     <h3 id="contact-title" class="font-playfair text-4xl md:text-5xl font-bold text-emerald-900 mb-8">Información de contacto</h3>
+     <div class="w-24 h-1 gold-gradient mx-auto mb-8"></div>
+     <p class="font-lato text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">Estamos aquí para ayudarte a encontrar la joya perfecta. Contáctanos para una consulta personalizada.</p>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-12"><!-- Contact Form -->
+     <div class="scroll-reveal">
+      <div class="bg-white rounded-3xl p-8 luxury-shadow">
+       <h4 class="font-playfair text-2xl font-bold text-emerald-900 mb-6">Envíanos un mensaje</h4>
+       <form id="contactForm" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+         <div><label for="name" class="block font-lato text-sm font-medium text-gray-700 mb-2">Nombre completo</label> <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+         </div>
+         <div><label for="email" class="block font-lato text-sm font-medium text-gray-700 mb-2">Correo electrónico</label> <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+         </div>
+        </div>
+        <div><label for="phone" class="block font-lato text-sm font-medium text-gray-700 mb-2">Teléfono</label> <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+        </div>
+        <div><label for="service" class="block font-lato text-sm font-medium text-gray-700 mb-2">Servicio de interés</label> <select id="service" name="service" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"> <option value="">Selecciona un servicio</option> <option value="anillos">Anillos de compromiso</option> <option value="collares">Collares personalizados</option> <option value="aretes">Aretes de esmeralda</option> <option value="pulseras">Pulseras artesanales</option> <option value="reparacion">Reparación de joyas</option> <option value="consulta">Consulta general</option> </select>
+        </div>
+        <div><label for="message" class="block font-lato text-sm font-medium text-gray-700 mb-2">Mensaje</label> <textarea id="message" name="message" rows="4" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none"></textarea>
+        </div><button type="submit" id="submitBtn" class="w-full emerald-gradient text-white py-4 rounded-xl font-lato font-medium text-lg hover-lift emerald-shine luxury-shadow transition-all"> <span id="submitText">Enviar mensaje</span> <span id="submitLoading" class="hidden">Enviando...</span> </button>
+       </form><!-- Success Message -->
+       <div id="successMessage" class="hidden mt-6 p-4 bg-emerald-100 border border-emerald-300 rounded-xl">
+        <div class="flex items-center">
+         <svg class="w-5 h-5 text-emerald-600 mr-2" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+         </svg>
+         <p class="font-lato text-emerald-800">¡Mensaje enviado exitosamente! Te contactaremos pronto.</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Contact Info -->
+     <div class="scroll-reveal space-y-8">
+      <div class="bg-white rounded-3xl p-8 luxury-shadow hover-lift">
+       <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center flex-shrink-0">
+         <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+         </svg>
+        </div>
+        <div>
+         <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Ubicación</h4>
+         <p class="font-lato text-gray-600">Carrera XX # XX – XX<br>
+           Cartagena de Indias, Colombia</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 luxury-shadow hover-lift">
+       <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center flex-shrink-0">
+         <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+         </svg>
+        </div>
+        <div>
+         <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Teléfono</h4>
+         <p class="font-lato text-gray-600">+ 57 300 000000</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 luxury-shadow hover-lift">
+       <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center flex-shrink-0">
+         <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+         </svg>
+        </div>
+        <div>
+         <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Email</h4>
+         <p class="font-lato text-gray-600">contacto@milandjewelry.com</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 luxury-shadow hover-lift">
+       <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center flex-shrink-0">
+         <svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+         </svg>
+        </div>
+        <div>
+         <h4 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Horarios</h4>
+         <p class="font-lato text-gray-600">Lunes - Viernes: 9:00 AM - 6:00 PM<br>
+           Sábados: 9:00 AM - 4:00 PM<br>
+           Domingos: Cita previa</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- WhatsApp Float Button -->
+  <div class="whatsapp-float"><button id="whatsappBtn" class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white luxury-shadow hover:scale-110 transition-transform">
+    <svg class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
+    </svg></button>
+  </div><!-- WhatsApp Modal -->
+  <div class="whatsapp-modal" id="whatsappModal">
+   <div class="whatsapp-content">
+    <div class="flex items-center justify-between mb-6">
+     <div class="flex items-center space-x-3">
+      <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
+       <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
+       </svg>
+      </div>
+      <div>
+       <h4 class="font-playfair text-xl font-bold text-emerald-900">MilAnd Joyería</h4>
+       <p class="font-lato text-sm text-gray-600">Atención personalizada</p>
+      </div>
+     </div><button id="closeWhatsapp" class="text-gray-400 hover:text-gray-600 transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg></button>
+    </div>
+    <form id="whatsappForm" class="space-y-4">
+     <div><label for="whatsappName" class="block font-lato text-sm font-medium text-gray-700 mb-2">Nombre</label> <input type="text" id="whatsappName" name="whatsappName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+     </div>
+     <div><label for="whatsappInterest" class="block font-lato text-sm font-medium text-gray-700 mb-2">¿En qué estás interesado?</label> <select id="whatsappInterest" name="whatsappInterest" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"> <option value="">Selecciona una opción</option> <option value="anillos">Anillos de compromiso</option> <option value="collares">Collares personalizados</option> <option value="aretes">Aretes de esmeralda</option> <option value="pulseras">Pulseras artesanales</option> <option value="consulta">Consulta general</option> <option value="cita">Agendar cita</option> </select>
+     </div>
+     <div><label for="whatsappMessage" class="block font-lato text-sm font-medium text-gray-700 mb-2">Mensaje adicional (opcional)</label> <textarea id="whatsappMessage" name="whatsappMessage" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors resize-none" placeholder="Cuéntanos más detalles..."></textarea>
+     </div><button type="submit" class="w-full bg-green-500 text-white py-4 rounded-xl font-lato font-medium text-lg hover:bg-green-600 transition-colors"> Enviar mensaje por WhatsApp </button>
+    </form>
+   </div>
+  </div><!-- Universal Modal -->
+  <div class="modal-overlay" id="universalModal">
+   <div class="modal-content"><button class="modal-close" id="modalClose">×</button>
+    <div id="modalBody"><!-- Dynamic content will be inserted here -->
+    </div>
+   </div>
+  </div><!-- Footer -->
+  <footer class="bg-emerald-900 text-white py-12">
+   <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+     <div class="flex items-center space-x-3 mb-6 md:mb-0">
+      <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center">
+       <svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z" />
+       </svg>
+      </div>
+      <div>
+       <h4 class="font-playfair text-xl font-bold">MilAnd</h4>
+       <p class="font-lato text-sm text-emerald-200">Joyería de Lujo y Autenticidad</p>
+      </div>
+     </div>
+     <div class="text-center md:text-right">
+      <p class="font-lato text-emerald-200 mb-2">© 2025 MilAnd Joyería. Todos los derechos reservados.</p>
+      <p class="font-lato text-sm text-emerald-300">Diseñado por: <a href="https://leonova-studio.github.io/portfolio/" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors font-medium"> LEONOVA STUDIO </a></p>
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script>
+        // Global variables
+        let currentSlide = 0;
+        let isPlaying = true;
+        let slideInterval;
+        let currentTestimonial = 0;
+        let contactData = [];
+        let currentRecordCount = 0;
+
+        // Configuration for editable elements
+        const defaultConfig = {
+            brand_name: "MilAnd",
+            tagline: "Joyería de Lujo y Autenticidad",
+            hero_title: "Piezas únicas con la Esmeralda Colombiana",
+            hero_subtitle: "La más valiosa del mundo",
+            promise_title: "Nuestra Promesa",
+            pillars_title: "Los pilares de la marca",
+            contact_title: "Información de contacto"
+        };
+
+        // Product data
+        const productData = {
+            'anillo-esmeralda-real': {
+                name: 'Anillo Esmeralda Real',
+                price: '$2,850',
+                description: 'Oro 18K con esmeralda colombiana certificada',
+                details: 'Este exquisito anillo presenta una esmeralda colombiana de 2.5 quilates, montada en oro 18K con un diseño clásico que resalta la belleza natural de la gema. Incluye certificado de autenticidad.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Gema principal': 'Esmeralda colombiana 2.5ct',
+                    'Origen': 'Muzo, Colombia',
+                    'Talla disponible': '6-8 (ajustable)',
+                    'Garantía': '2 años'
+                }
+            },
+            'collar-filigrana-dorada': {
+                name: 'Collar Filigrana Dorada',
+                price: '$1,950',
+                description: 'Técnica artesanal en oro 18K',
+                details: 'Collar elaborado con la tradicional técnica de filigrana cartagenera, cada hilo de oro ha sido trabajado a mano por maestros artesanos con más de 20 años de experiencia.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Técnica': 'Filigrana tradicional',
+                    'Longitud': '45cm (ajustable)',
+                    'Peso': '15 gramos',
+                    'Garantía': '2 años'
+                }
+            },
+            'aretes-esmeralda-clasicos': {
+                name: 'Aretes Esmeralda Clásicos',
+                price: '$1,450',
+                description: 'Elegancia atemporal en oro 18K',
+                details: 'Par de aretes con esmeraldas colombianas de corte oval, montadas en oro 18K con cierre de seguridad. Diseño clásico perfecto para cualquier ocasión.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Gemas': 'Esmeraldas colombianas 1ct c/u',
+                    'Corte': 'Oval',
+                    'Cierre': 'Seguridad con rosca',
+                    'Garantía': '2 años'
+                }
+            },
+            'pulsera-tradicion-colombiana': {
+                name: 'Pulsera Tradición Colombiana',
+                price: '$1,750',
+                description: 'Filigrana artesanal con esmeraldas',
+                details: 'Pulsera que combina la técnica de filigrana con pequeñas esmeraldas incrustadas, representando la tradición y elegancia de la joyería colombiana.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Gemas': '7 esmeraldas de 0.3ct c/u',
+                    'Longitud': '18cm (ajustable)',
+                    'Técnica': 'Filigrana + engaste',
+                    'Garantía': '2 años'
+                }
+            },
+            'anillo-compromiso-esmeralda': {
+                name: 'Anillo Compromiso Esmeralda',
+                price: '$4,200',
+                description: 'Diseño exclusivo para momentos únicos',
+                details: 'Anillo de compromiso con esmeralda central de 3 quilates, rodeada de pequeños diamantes en oro 18K. Diseño exclusivo de MilAnd para celebrar el amor eterno.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Gema principal': 'Esmeralda colombiana 3ct',
+                    'Gemas secundarias': '12 diamantes 0.1ct c/u',
+                    'Talla disponible': '5-9 (ajustable)',
+                    'Garantía': 'De por vida'
+                }
+            },
+            'collar-gargantilla-elegante': {
+                name: 'Collar Gargantilla Elegante',
+                price: '$2,350',
+                description: 'Sofisticación en oro 18K',
+                details: 'Gargantilla de diseño contemporáneo con detalles de filigrana y una esmeralda central. Perfecta para eventos especiales y uso diario elegante.',
+                specifications: {
+                    'Material': 'Oro 18K',
+                    'Gema central': 'Esmeralda colombiana 1.5ct',
+                    'Longitud': '35cm (fija)',
+                    'Estilo': 'Contemporáneo con filigrana',
+                    'Garantía': '2 años'
+                }
+            }
+        };
+
+        // Data handler for contact form
+        const dataHandler = {
+            onDataChanged(data) {
+                contactData = data;
+                currentRecordCount = data.length;
+            }
+        };
+
+        // Initialize Data SDK
+        async function initializeDataSdk() {
+            if (window.dataSdk) {
+                const initResult = await window.dataSdk.init(dataHandler);
+                if (!initResult.isOk) {
+                    console.error("Failed to initialize data SDK");
+                }
+            }
+        }
+
+        // Initialize Element SDK
+        async function initializeElementSdk() {
+            if (window.elementSdk) {
+                await window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange: async (config) => {
+                        // Update brand name
+                        const brandNameEl = document.getElementById('brand-name');
+                        if (brandNameEl) {
+                            brandNameEl.textContent = config.brand_name || defaultConfig.brand_name;
+                        }
+
+                        // Update tagline
+                        const taglineEl = document.getElementById('tagline');
+                        if (taglineEl) {
+                            taglineEl.textContent = config.tagline || defaultConfig.tagline;
+                        }
+
+                        // Update hero title
+                        const heroTitleEl = document.getElementById('hero-title');
+                        if (heroTitleEl) {
+                            const title = config.hero_title || defaultConfig.hero_title;
+                            heroTitleEl.innerHTML = title.replace('Esmeralda Colombiana', '<span class="gold-gradient bg-clip-text text-transparent">Esmeralda Colombiana</span>');
+                        }
+
+                        // Update hero subtitle
+                        const heroSubtitleEl = document.getElementById('hero-subtitle');
+                        if (heroSubtitleEl) {
+                            heroSubtitleEl.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+                        }
+
+                        // Update promise title
+                        const promiseTitleEl = document.getElementById('promise-title');
+                        if (promiseTitleEl) {
+                            promiseTitleEl.textContent = config.promise_title || defaultConfig.promise_title;
+                        }
+
+                        // Update pillars title
+                        const pillarsTitleEl = document.getElementById('pillars-title');
+                        if (pillarsTitleEl) {
+                            pillarsTitleEl.textContent = config.pillars_title || defaultConfig.pillars_title;
+                        }
+
+                        // Update contact title
+                        const contactTitleEl = document.getElementById('contact-title');
+                        if (contactTitleEl) {
+                            contactTitleEl.textContent = config.contact_title || defaultConfig.contact_title;
+                        }
+                    },
+                    mapToCapabilities: (config) => ({
+                        recolorables: [],
+                        borderables: [],
+                        fontEditable: undefined,
+                        fontSizeable: undefined
+                    }),
+                    mapToEditPanelValues: (config) => new Map([
+                        ["brand_name", config.brand_name || defaultConfig.brand_name],
+                        ["tagline", config.tagline || defaultConfig.tagline],
+                        ["hero_title", config.hero_title || defaultConfig.hero_title],
+                        ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle],
+                        ["promise_title", config.promise_title || defaultConfig.promise_title],
+                        ["pillars_title", config.pillars_title || defaultConfig.pillars_title],
+                        ["contact_title", config.contact_title || defaultConfig.contact_title]
+                    ])
+                });
+            }
+        }
+
+        // Button Functions
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function openModal(content) {
+            const modal = document.getElementById('universalModal');
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = content;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('universalModal');
+            modal.classList.remove('active');
+        }
+
+        function openJewelryConfigurator() {
+            const configuratorContent = `
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="font-playfair text-3xl font-bold text-emerald-900 mb-8 text-center">Configurador de Joyas Personalizado</h2>
+                    
+                    <div class="configurator-section active" id="step1">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">1. Selecciona el tipo de joya</h3>
+                        <div class="option-grid">
+                            <div class="option-item" onclick="selectJewelryType('anillo')">
+                                <div class="text-3xl mb-2">💍</div>
+                                <div class="font-medium">Anillo</div>
+                            </div>
+                            <div class="option-item" onclick="selectJewelryType('collar')">
+                                <div class="text-3xl mb-2">📿</div>
+                                <div class="font-medium">Collar</div>
+                            </div>
+                            <div class="option-item" onclick="selectJewelryType('aretes')">
+                                <div class="text-3xl mb-2">💎</div>
+                                <div class="font-medium">Aretes</div>
+                            </div>
+                            <div class="option-item" onclick="selectJewelryType('pulsera')">
+                                <div class="text-3xl mb-2">⌚</div>
+                                <div class="font-medium">Pulsera</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="configurator-section" id="step2" style="display: none;">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">2. Elige el material</h3>
+                        <div class="option-grid">
+                            <div class="option-item" onclick="selectMaterial('oro18k')">
+                                <div class="w-8 h-8 bg-yellow-400 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Oro 18K</div>
+                                <div class="text-sm text-gray-600">+$0</div>
+                            </div>
+                            <div class="option-item" onclick="selectMaterial('oro14k')">
+                                <div class="w-8 h-8 bg-yellow-300 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Oro 14K</div>
+                                <div class="text-sm text-gray-600">-$200</div>
+                            </div>
+                            <div class="option-item" onclick="selectMaterial('plata')">
+                                <div class="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Plata 925</div>
+                                <div class="text-sm text-gray-600">-$800</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="configurator-section" id="step3" style="display: none;">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">3. Selecciona la gema</h3>
+                        <div class="option-grid">
+                            <div class="option-item" onclick="selectGem('esmeralda')">
+                                <div class="w-8 h-8 bg-emerald-500 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Esmeralda</div>
+                                <div class="text-sm text-gray-600">Premium</div>
+                            </div>
+                            <div class="option-item" onclick="selectGem('diamante')">
+                                <div class="w-8 h-8 bg-gray-100 border-2 border-gray-300 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Diamante</div>
+                                <div class="text-sm text-gray-600">+$500</div>
+                            </div>
+                            <div class="option-item" onclick="selectGem('rubi')">
+                                <div class="w-8 h-8 bg-red-500 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Rubí</div>
+                                <div class="text-sm text-gray-600">+$300</div>
+                            </div>
+                            <div class="option-item" onclick="selectGem('zafiro')">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full mx-auto mb-2"></div>
+                                <div class="font-medium">Zafiro</div>
+                                <div class="text-sm text-gray-600">+$250</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="configurator-section" id="step4" style="display: none;">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">4. Resumen de tu joya personalizada</h3>
+                        <div class="bg-emerald-50 p-6 rounded-xl">
+                            <div id="configSummary" class="space-y-2 mb-6">
+                                <!-- Summary will be populated by JavaScript -->
+                            </div>
+                            <div class="border-t pt-4">
+                                <div class="flex justify-between items-center text-xl font-bold">
+                                    <span>Precio estimado:</span>
+                                    <span id="totalPrice" class="text-emerald-600">$0</span>
+                                </div>
+                            </div>
+                            <button onclick="requestQuote()" class="w-full mt-6 emerald-gradient text-white py-3 rounded-xl font-medium hover-lift">
+                                Solicitar Cotización Personalizada
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal(configuratorContent);
+        }
+
+        function showCertifications() {
+            const certificationsContent = `
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="font-playfair text-3xl font-bold text-emerald-900 mb-8 text-center">Certificaciones y Garantías</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-emerald-50 p-6 rounded-xl">
+                            <div class="w-16 h-16 emerald-gradient rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 9.739 9 11 5.16-1.261 9-5.45 9-11V7l-10-5z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Certificado de Autenticidad</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>✓ Certificado por laboratorio gemológico internacional</li>
+                                <li>✓ Análisis de pureza y origen de esmeraldas</li>
+                                <li>✓ Verificación de quilataje y calidad</li>
+                                <li>✓ Garantía de oro 18K certificado</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-amber-50 p-6 rounded-xl">
+                            <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Garantías Incluidas</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>✓ Garantía de manufactura: 2 años</li>
+                                <li>✓ Mantenimiento gratuito primer año</li>
+                                <li>✓ Pulido y limpieza sin costo</li>
+                                <li>✓ Seguro contra defectos de fábrica</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-teal-50 p-6 rounded-xl">
+                            <div class="w-16 h-16 emerald-gradient rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Origen Certificado</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>✓ Esmeraldas de minas colombianas certificadas</li>
+                                <li>✓ Trazabilidad completa del origen</li>
+                                <li>✓ Comercio ético y responsable</li>
+                                <li>✓ Apoyo a comunidades mineras locales</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-orange-50 p-6 rounded-xl">
+                            <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-4 text-center">Tradición Artesanal</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>✓ Técnica de filigrana tradicional cartagenera</li>
+                                <li>✓ Maestros artesanos con 15+ años experiencia</li>
+                                <li>✓ Proceso 100% artesanal</li>
+                                <li>✓ Patrimonio cultural colombiano</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button onclick="scrollToSection('contacto'); closeModal();" class="emerald-gradient text-white px-8 py-3 rounded-xl font-medium hover-lift">
+                            Solicitar Certificados Detallados
+                        </button>
+                    </div>
+                </div>
+            `;
+            openModal(certificationsContent);
+        }
+
+        function showArtisanalProcess() {
+            const processContent = `
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="font-playfair text-3xl font-bold text-emerald-900 mb-8 text-center">Proceso Artesanal de Filigrana</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">1</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Preparación del Oro</h3>
+                                <p class="text-gray-700 leading-relaxed">El oro 18K se funde y se convierte en hilos extremadamente finos de apenas 0.3mm de grosor. Este proceso requiere precisión absoluta para mantener la pureza del metal.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">2</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Diseño y Planificación</h3>
+                                <p class="text-gray-700 leading-relaxed">Cada pieza se diseña cuidadosamente en papel antes de comenzar. Los maestros artesanos planifican cada curva y detalle que dará vida a la joya.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">3</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Tejido de Filigrana</h3>
+                                <p class="text-gray-700 leading-relaxed">Con herramientas tradicionales, los artesanos tejen los hilos de oro creando patrones intrincados. Este proceso puede tomar días o semanas dependiendo de la complejidad.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">4</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Engaste de Esmeraldas</h3>
+                                <p class="text-gray-700 leading-relaxed">Las esmeraldas colombianas se seleccionan cuidadosamente y se engastan a mano, asegurando que cada gema esté perfectamente asentada y protegida.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 emerald-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">5</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Pulido y Acabado</h3>
+                                <p class="text-gray-700 leading-relaxed">La pieza recibe un pulido especializado que resalta el brillo del oro y la belleza de las esmeraldas, creando el acabado perfecto que caracteriza a MilAnd.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">6</div>
+                            <div>
+                                <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-2">Control de Calidad</h3>
+                                <p class="text-gray-700 leading-relaxed">Cada joya pasa por rigurosos controles de calidad antes de ser certificada y entregada, garantizando que cumple con los más altos estándares de MilAnd.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-emerald-50 p-6 rounded-xl text-center">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-900 mb-4">Tiempo de Elaboración</h3>
+                        <p class="text-gray-700 mb-4">Cada pieza de filigrana requiere entre 15 a 45 días de trabajo artesanal, dependiendo de su complejidad y detalle.</p>
+                        <button onclick="scrollToSection('contacto'); closeModal();" class="emerald-gradient text-white px-8 py-3 rounded-xl font-medium hover-lift">
+                            Solicitar Pieza Personalizada
+                        </button>
+                    </div>
+                </div>
+            `;
+            openModal(processContent);
+        }
+
+        function showProductDetails(productId) {
+            const product = productData[productId];
+            if (!product) return;
+
+            const detailsContent = `
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="font-playfair text-3xl font-bold text-emerald-900 mb-2">${product.name}</h2>
+                    <p class="text-xl text-amber-600 font-bold mb-6">${product.price}</p>
+                    
+                    <div class="mb-8">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">Descripción</h3>
+                        <p class="text-gray-700 leading-relaxed">${product.details}</p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="font-playfair text-xl font-bold text-emerald-800 mb-4">Especificaciones</h3>
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            ${Object.entries(product.specifications).map(([key, value]) => `
+                                <div class="flex justify-between py-2 border-b border-gray-200 last:border-b-0">
+                                    <span class="font-medium text-gray-700">${key}:</span>
+                                    <span class="text-gray-600">${value}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="personalizeProduct('${productId}')" class="flex-1 emerald-gradient text-white py-3 rounded-xl font-medium hover-lift">
+                            Personalizar Esta Joya
+                        </button>
+                        <button onclick="contactForProduct('${productId}')" class="flex-1 gold-gradient text-white py-3 rounded-xl font-medium hover-lift">
+                            Consultar Disponibilidad
+                        </button>
+                    </div>
+                </div>
+            `;
+            openModal(detailsContent);
+        }
+
+        function personalizeProduct(productId) {
+            const product = productData[productId];
+            if (!product) return;
+
+            const personalizeContent = `
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="font-playfair text-3xl font-bold text-emerald-900 mb-6">Personalizar: ${product.name}</h2>
+                    
+                    <form id="personalizeForm" class="space-y-6">
+                        <input type="hidden" name="productId" value="${productId}">
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block font-lato text-sm font-medium text-gray-700 mb-2">Talla (si aplica)</label>
+                                <select name="size" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                    <option value="">Seleccionar talla</option>
+                                    <option value="5">Talla 5</option>
+                                    <option value="6">Talla 6</option>
+                                    <option value="7">Talla 7</option>
+                                    <option value="8">Talla 8</option>
+                                    <option value="9">Talla 9</option>
+                                    <option value="custom">Talla personalizada</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block font-lato text-sm font-medium text-gray-700 mb-2">Acabado preferido</label>
+                                <select name="finish" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                    <option value="brillante">Brillante</option>
+                                    <option value="mate">Mate</option>
+                                    <option value="satinado">Satinado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-lato text-sm font-medium text-gray-700 mb-2">Grabado personalizado (opcional)</label>
+                            <input type="text" name="engraving" placeholder="Texto para grabar (máx. 20 caracteres)" maxlength="20" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                            <p class="text-sm text-gray-500 mt-1">Servicio de grabado: +$50</p>
+                        </div>
+
+                        <div>
+                            <label class="block font-lato text-sm font-medium text-gray-700 mb-2">Comentarios especiales</label>
+                            <textarea name="comments" rows="3" placeholder="Cuéntanos cualquier detalle especial que desees..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block font-lato text-sm font-medium text-gray-700 mb-2">Información de contacto</label>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <input type="text" name="customerName" placeholder="Tu nombre completo" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                <input type="email" name="customerEmail" placeholder="Tu email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full emerald-gradient text-white py-4 rounded-xl font-medium text-lg hover-lift">
+                            Enviar Solicitud de Personalización
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            openModal(personalizeContent);
+            
+            // Add form handler
+            setTimeout(() => {
+                const form = document.getElementById('personalizeForm');
+                if (form) {
+                    form.addEventListener('submit', handlePersonalizationRequest);
+                }
+            }, 100);
+        }
+
+        function contactForProduct(productId) {
+            closeModal();
+            scrollToSection('contacto');
+            
+            // Pre-fill contact form
+            setTimeout(() => {
+                const product = productData[productId];
+                const serviceSelect = document.getElementById('service');
+                const messageTextarea = document.getElementById('message');
+                
+                if (serviceSelect) {
+                    serviceSelect.value = 'consulta';
+                }
+                
+                if (messageTextarea && product) {
+                    messageTextarea.value = `Estoy interesado/a en obtener más información sobre: ${product.name} (${product.price}). Por favor, contáctenme para conocer disponibilidad y opciones de personalización.`;
+                }
+            }, 500);
+        }
+
+        // Configurator variables
+        let configuratorData = {
+            type: '',
+            material: '',
+            gem: '',
+            basePrice: 1500
+        };
+
+        function selectJewelryType(type) {
+            configuratorData.type = type;
+            document.querySelectorAll('#step1 .option-item').forEach(item => item.classList.remove('selected'));
+            event.target.closest('.option-item').classList.add('selected');
+            
+            setTimeout(() => {
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+                document.getElementById('step2').classList.add('active');
+            }, 300);
+        }
+
+        function selectMaterial(material) {
+            configuratorData.material = material;
+            document.querySelectorAll('#step2 .option-item').forEach(item => item.classList.remove('selected'));
+            event.target.closest('.option-item').classList.add('selected');
+            
+            setTimeout(() => {
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
+                document.getElementById('step3').classList.add('active');
+            }, 300);
+        }
+
+        function selectGem(gem) {
+            configuratorData.gem = gem;
+            document.querySelectorAll('#step3 .option-item').forEach(item => item.classList.remove('selected'));
+            event.target.closest('.option-item').classList.add('selected');
+            
+            setTimeout(() => {
+                document.getElementById('step3').style.display = 'none';
+                document.getElementById('step4').style.display = 'block';
+                document.getElementById('step4').classList.add('active');
+                updateConfigSummary();
+            }, 300);
+        }
+
+        function updateConfigSummary() {
+            const summary = document.getElementById('configSummary');
+            const totalPrice = document.getElementById('totalPrice');
+            
+            let price = configuratorData.basePrice;
+            const materialPrices = { oro18k: 0, oro14k: -200, plata: -800 };
+            const gemPrices = { esmeralda: 0, diamante: 500, rubi: 300, zafiro: 250 };
+            
+            price += materialPrices[configuratorData.material] || 0;
+            price += gemPrices[configuratorData.gem] || 0;
+            
+            const typeNames = { anillo: 'Anillo', collar: 'Collar', aretes: 'Aretes', pulsera: 'Pulsera' };
+            const materialNames = { oro18k: 'Oro 18K', oro14k: 'Oro 14K', plata: 'Plata 925' };
+            const gemNames = { esmeralda: 'Esmeralda', diamante: 'Diamante', rubi: 'Rubí', zafiro: 'Zafiro' };
+            
+            summary.innerHTML = `
+                <div class="flex justify-between"><span>Tipo de joya:</span><span>${typeNames[configuratorData.type]}</span></div>
+                <div class="flex justify-between"><span>Material:</span><span>${materialNames[configuratorData.material]}</span></div>
+                <div class="flex justify-between"><span>Gema principal:</span><span>${gemNames[configuratorData.gem]}</span></div>
+                <div class="flex justify-between"><span>Técnica:</span><span>Filigrana artesanal</span></div>
+            `;
+            
+            totalPrice.textContent = `$${price.toLocaleString()}`;
+        }
+
+        function requestQuote() {
+            const whatsappMessage = `¡Hola! Me interesa una cotización para una joya personalizada:
+
+🔸 Tipo: ${configuratorData.type}
+🔸 Material: ${configuratorData.material}  
+🔸 Gema: ${configuratorData.gem}
+🔸 Técnica: Filigrana artesanal
+
+¿Podrían enviarme más detalles y el precio final?
+
+¡Gracias!`;
+            
+            const whatsappUrl = `https://wa.me/18683253395?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            closeModal();
+        }
+
+        function handlePersonalizationRequest(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const product = productData[formData.get('productId')];
+            
+            let message = `¡Hola! Me interesa personalizar: ${product.name}
+
+📋 Detalles de personalización:`;
+            
+            if (formData.get('size')) message += `\n🔸 Talla: ${formData.get('size')}`;
+            if (formData.get('finish')) message += `\n🔸 Acabado: ${formData.get('finish')}`;
+            if (formData.get('engraving')) message += `\n🔸 Grabado: "${formData.get('engraving')}"`;
+            if (formData.get('comments')) message += `\n🔸 Comentarios: ${formData.get('comments')}`;
+            
+            message += `\n\n👤 Contacto: ${formData.get('customerName')}`;
+            message += `\n📧 Email: ${formData.get('customerEmail')}`;
+            message += `\n\n¿Podrían enviarme más información y cotización?`;
+            
+            const whatsappUrl = `https://wa.me/573205667458?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            closeModal();
+        }
+
+        // Carousel functionality
+        function initCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playIcon = document.getElementById('playIcon');
+            const pauseIcon = document.getElementById('pauseIcon');
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % 3;
+                updateCarousel();
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + 3) % 3;
+                updateCarousel();
+            }
+
+            function startAutoplay() {
+                slideInterval = setInterval(nextSlide, 5000);
+                isPlaying = true;
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }
+
+            function stopAutoplay() {
+                clearInterval(slideInterval);
+                isPlaying = false;
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+
+            // Event listeners
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                if (isPlaying) {
+                    stopAutoplay();
+                    startAutoplay();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                if (isPlaying) {
+                    stopAutoplay();
+                    startAutoplay();
+                }
+            });
+
+            playPauseBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    stopAutoplay();
+                } else {
+                    startAutoplay();
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateCarousel();
+                    if (isPlaying) {
+                        stopAutoplay();
+                        startAutoplay();
+                    }
+                });
+            });
+
+            // Start autoplay
+            startAutoplay();
+        }
+
+        // Product filter functionality
+        function initProductFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.dataset.filter;
+                    
+                    // Update active button
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'emerald-gradient', 'text-white');
+                        b.classList.add('bg-white', 'text-emerald-800', 'border', 'border-emerald-200');
+                    });
+                    btn.classList.remove('bg-white', 'text-emerald-800', 'border', 'border-emerald-200');
+                    btn.classList.add('active', 'emerald-gradient', 'text-white');
+
+                    // Filter products
+                    productCards.forEach(card => {
+                        const category = card.dataset.category;
+                        if (filter === 'all' || category === filter) {
+                            card.style.display = 'block';
+                            card.style.animation = 'fadeIn 0.5s ease-in-out';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Set initial active state
+            const firstBtn = filterBtns[0];
+            firstBtn.classList.add('active', 'emerald-gradient', 'text-white');
+            firstBtn.classList.remove('bg-white', 'text-emerald-800', 'border', 'border-emerald-200');
+        }
+
+        // Testimonials carousel
+        function initTestimonials() {
+            const track = document.getElementById('testimonialTrack');
+            const prevBtn = document.getElementById('testimonialPrev');
+            const nextBtn = document.getElementById('testimonialNext');
+            const testimonials = document.querySelectorAll('.testimonial-card');
+
+            function updateTestimonials() {
+                const cardWidth = testimonials[0].offsetWidth + 30; // card width + gap
+                track.style.transform = `translateX(-${currentTestimonial * cardWidth}px)`;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                updateTestimonials();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+                updateTestimonials();
+            });
+
+            // Auto-scroll testimonials
+            setInterval(() => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                updateTestimonials();
+            }, 6000);
+        }
+
+        // Contact form functionality
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitLoading = document.getElementById('submitLoading');
+            const successMessage = document.getElementById('successMessage');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Check data limit
+                if (currentRecordCount >= 999) {
+                    showCustomMessage('Límite alcanzado. Se han alcanzado las 999 consultas máximas. Por favor, contacta directamente por WhatsApp.', 'error');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+
+                const formData = new FormData(form);
+                const contactRecord = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone') || '',
+                    service: formData.get('service') || '',
+                    message: formData.get('message'),
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    if (window.dataSdk) {
+                        const result = await window.dataSdk.create(contactRecord);
+                        
+                        if (result.isOk) {
+                            form.reset();
+                            successMessage.classList.remove('hidden');
+                            setTimeout(() => {
+                                successMessage.classList.add('hidden');
+                            }, 5000);
+                        } else {
+                            showCustomMessage('Error al enviar el mensaje. Por favor, intenta nuevamente.', 'error');
+                        }
+                    } else {
+                        showCustomMessage('Servicio no disponible. Por favor, contacta directamente por WhatsApp.', 'error');
+                    }
+                } catch (error) {
+                    showCustomMessage('Error al enviar el mensaje. Por favor, intenta nuevamente.', 'error');
+                } finally {
+                    // Reset loading state
+                    submitBtn.disabled = false;
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                }
+            });
+        }
+
+        // WhatsApp functionality
+        function initWhatsApp() {
+            const whatsappBtn = document.getElementById('whatsappBtn');
+            const whatsappModal = document.getElementById('whatsappModal');
+            const closeWhatsapp = document.getElementById('closeWhatsapp');
+            const whatsappForm = document.getElementById('whatsappForm');
+
+            whatsappBtn.addEventListener('click', () => {
+                whatsappModal.classList.add('active');
+            });
+
+            closeWhatsapp.addEventListener('click', () => {
+                whatsappModal.classList.remove('active');
+            });
+
+            whatsappModal.addEventListener('click', (e) => {
+                if (e.target === whatsappModal) {
+                    whatsappModal.classList.remove('active');
+                }
+            });
+
+            whatsappForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(whatsappForm);
+                const name = formData.get('whatsappName');
+                const interest = formData.get('whatsappInterest');
+                const message = formData.get('whatsappMessage') || '';
+                
+                const interestText = {
+                    'anillos': 'Anillos de compromiso',
+                    'collares': 'Collares personalizados',
+                    'aretes': 'Aretes de esmeralda',
+                    'pulseras': 'Pulseras artesanales',
+                    'consulta': 'Consulta general',
+                    'cita': 'Agendar cita'
+                };
+
+                let whatsappMessage = `¡Hola! Soy ${name} y estoy interesado/a en ${interestText[interest] || interest}.`;
+                if (message) {
+                    whatsappMessage += `\n\nMensaje adicional: ${message}`;
+                }
+                whatsappMessage += '\n\n¡Gracias por su atención!';
+
+                const whatsappUrl = `https://wa.me/573205667458?text=${encodeURIComponent(whatsappMessage)}`;
+                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+                
+                whatsappModal.classList.remove('active');
+                whatsappForm.reset();
+            });
+        }
+
+        // Theme toggle functionality
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+
+            themeToggle.addEventListener('click', () => {
+                if (body.dataset.theme === 'dark') {
+                    body.dataset.theme = 'light';
+                    body.classList.remove('bg-gray-900', 'text-white');
+                    body.classList.add('bg-white', 'text-gray-900');
+                } else {
+                    body.dataset.theme = 'dark';
+                    body.classList.remove('bg-white', 'text-gray-900');
+                    body.classList.add('bg-gray-900', 'text-white');
+                }
+            });
+        }
+
+        // Mobile menu functionality
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when clicking on links
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // Scroll reveal functionality
+        function initScrollReveal() {
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+        }
+
+        // Diamond particles animation
+        function createDiamondParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'diamond';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 6000);
+            }
+
+            // Create particles periodically
+            setInterval(createParticle, 2000);
+        }
+
+        // Smooth scrolling for navigation links
+        function initSmoothScrolling() {
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80; // Account for fixed header
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Custom message function
+        function showCustomMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `fixed top-20 right-4 z-50 p-4 rounded-xl max-w-sm transform translate-x-full transition-transform duration-300 ${
+                type === 'error' ? 'bg-red-100 border border-red-300 text-red-800' : 'bg-emerald-100 border border-emerald-300 text-emerald-800'
+            }`;
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        ${type === 'error' 
+                            ? '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>'
+                            : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+                        }
+                    </svg>
+                    <p class="font-lato">${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Animate in
+            setTimeout(() => {
+                messageDiv.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                messageDiv.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Modal functionality
+        function initModal() {
+            const modal = document.getElementById('universalModal');
+            const closeBtn = document.getElementById('modalClose');
+
+            closeBtn.addEventListener('click', closeModal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize SDKs
+            await initializeDataSdk();
+            await initializeElementSdk();
+            
+            // Initialize all functionality
+            initCarousel();
+            initProductFilters();
+            initTestimonials();
+            initContactForm();
+            initWhatsApp();
+            initThemeToggle();
+            initMobileMenu();
+            initScrollReveal();
+            initSmoothScrolling();
+            initModal();
+            
+            // Start animations
+            createDiamondParticles();
+            
+            // Add CSS for filter buttons
+            const style = document.createElement('style');
+            style.textContent = `
+                .filter-btn {
+                    background: white;
+                    color: #064e3b;
+                    border: 1px solid #d1fae5;
+                }
+                .filter-btn.active {
+                    background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #10b981 100%);
+                    color: white;
+                    border: none;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99fb3b6251658733',t:'MTc2MzM0MDYwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
